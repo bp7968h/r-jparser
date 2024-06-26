@@ -22,8 +22,10 @@ pub fn run_jparser(path: &str){
         Err(e) => println!("Error Reading File: {:?}", e),
     }
 
-    let tokens = tokenizer(&contents);
+    match tokenizer(&contents) {
+        Ok(token) => println!("{:?}", token),
+        Err(e) => println!("Error: {}", e)
+    }
 
-    println!("{:?}", tokens)
     
 }
