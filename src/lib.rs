@@ -1,9 +1,11 @@
 use std::fs::File;
-use std::io::{Read, BufReader};
 
-pub mod tokenizer;
+pub mod reader;
+pub mod token;
+pub mod value;
+pub mod parser;
 
-use crate::tokenizer::tokenizer;
+use crate::parser::JsonParser;
 
 pub fn run_jparser(path: &str){
     let file = match File::open(path) {
@@ -14,18 +16,8 @@ pub fn run_jparser(path: &str){
         }
     };
 
-    let mut buf_reader = BufReader::new(file);
-    let mut contents = String::new();
-
-    match buf_reader.read_to_string(&mut contents) {
-        Ok(_) => (),
-        Err(e) => println!("Error Reading File: {:?}", e),
+    match JsonParser::parse(file) {
+        Ok(result) => println!("{:?}", result),
+        Err(()) => ()
     }
-
-    match tokenizer(&contents) {
-        Ok(token) => println!("{:?}", token),
-        Err(e) => println!("Error: {}", e)
-    }
-
-    
 }
